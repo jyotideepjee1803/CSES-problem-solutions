@@ -1,3 +1,4 @@
+//https://cses.fi/problemset/task/1193/
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
@@ -66,7 +67,7 @@ void solve(){
             if(c=='B') B = {i,j};
         }
     }
- 
+    //couldn't reach end : 
     bfs();
     if(!vis[B.ff][B.ss]){
         cout<<"NO\n"; return;
@@ -75,20 +76,20 @@ void solve(){
     cout<<"YES\n";
     string ans;
     while(B.ff != A.ff or B.ss != A.ss)
-	  {
-        auto c  = path[B.ff][B.ss];
+    {
+       auto c  = path[B.ff][B.ss];
         char ch;
  
-        if(c.first == 1 and c.second ==0) ch = 'D';
-		    else if(c.first == -1 and c.second ==0) ch = 'U';
-		    else if(c.first == 0 and c.second == 1) ch = 'R';
-		    else if(c.first == 0 and c.second == -1) ch = 'L';
-		
-		    ans.push_back(ch);
-		    B.ff -= c.first;  B.ss -= c.second;	
-	  }
+        if(c.ff == 1 and c.ss ==0) ch = 'D';
+        else if(c.ff == -1 and c.ss ==0) ch = 'U';
+        else if(c.ff == 0 and c.ss == 1) ch = 'R';
+        else if(c.ff == 0 and c.ss == -1) ch = 'L';
+    
+        ans.push_back(ch);
+        B.ff -= c.ff;  B.ss -= c.ss;	
+    }
     reverse(ans.begin(), ans.end());
-	  cout<< ans.size() << endl<<ans<<"\n";
+    cout<< ans.size() << endl<<ans<<"\n";
 }
 int32_t main()
 {
