@@ -133,20 +133,20 @@ void solve(){
     cout<<"YES\n";
     string ans;
     while(B.ff != A.ff or B.ss != A.ss)
-	{
-        auto c  = path[B.ff][B.ss];
-        char ch;
- 
-        if(c.ff == 1 and c.ss ==0) ch = 'D';
-        else if(c.ff == -1 and c.ss ==0) ch = 'U';
-        else if(c.ff == 0 and c.ss == 1) ch = 'R';
-        else if(c.ff == 0 and c.ss == -1) ch = 'L';
-    
-        ans.push_back(ch);
-        B.ff -= c.ff;  B.ss -= c.ss;	
-	}
+    {
+	auto c  = path[B.ff][B.ss];
+	char ch;
+	
+	if(c.ff == 1 and c.ss ==0) ch = 'D';
+	else if(c.ff == -1 and c.ss ==0) ch = 'U';
+	else if(c.ff == 0 and c.ss == 1) ch = 'R';
+	else if(c.ff == 0 and c.ss == -1) ch = 'L';
+	
+	ans.push_back(ch);
+	B.ff -= c.ff;  B.ss -= c.ss;	
+    }
     reverse(ans.begin(), ans.end());
-	cout<< ans.size() << endl<<ans<<"\n";
+    cout<< ans.size() << endl<<ans<<"\n";
 }
  
 int32_t main()
