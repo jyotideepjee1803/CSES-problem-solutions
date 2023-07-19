@@ -12,7 +12,6 @@ using namespace std;
 const int mod = 1e9+7;
 const int MAXN = 2e5+3;
 const int INF = 0x3f3f3f3f;
- 
 void init()
 {
     ios_base::sync_with_stdio(false);
@@ -24,7 +23,10 @@ void init()
     freopen("outputf.txt", "w", stdout);
 #endif
 }
- 
+
+//SIMILAR QUESTIONS : 
+//LC : 1235. Maximum profit in job scheduling
+//LC : 1751. Maximum number of events that can be attended II
 int prevBest(vector<int>& e, int val)
 {
     auto pos= lower_bound(all(e), val);
