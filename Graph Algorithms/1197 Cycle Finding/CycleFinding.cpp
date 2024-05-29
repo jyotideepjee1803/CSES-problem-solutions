@@ -1,17 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
+#define endl '\n'
 #define ff first 
 #define ss second 
-#define all(v) v.begin(),v.end()
-#define revall(v) v.rbegin(), v.rend()
-#define srt(v,l,r) sort(v.begin()+l, v.begin()+r) 
+#define all(u) u.begin(),u.end()
+#define revall(u) u.rbegin(), u.rend()
+#define srt(u,l,r) sort(u.begin()+l, u.begin()+r) 
 #define pb push_back
 #define vi vector<int>
 #define pii pair<int,int>
-const int mod = 1e9+7;
-const int MAXN = 1e5+2;
-const int INF = 1LL<<62;
+#define piii pair<pii,int>
+const int N = 2e5+10;
+const int mod = 998244353;
+const int MAXN = 3e5+3;
+const int INF = 1e18+7;
 void init()
 {
     ios_base::sync_with_stdio(false);
@@ -24,78 +27,85 @@ void init()
 #endif
 }
 
-//APPLY BELLMANFORD's algorithm to detect -ve cycle
-//keep track of the latest element which becomes part of -ve cycle
-//that latest element may be integral part of -ve cycle 
-//or may lead to the exit of cycle through other neighbours
-//in worst case (n-1) retraces would take us to a node which is an integral part of -ve cycle
 
-void solve()
-{
-    int n,m;
+int gcd(int a, int b){
+    if(b==0) return a;
+    return gcd(b,a%b);
+}
+
+int lcm(int a, int b){
+    return a/gcd(a,b)*b;
+}
+
+int n,m;
+void solve(){
     cin>>n>>m;
-  
-    vector<vi> edges;
+    vector<vector<int>> edges(m);
     for(int i=0;i<m;i++){
-       int u,v,x; cin>>u>>v>>x;
-       edges.pb({u,v,x});
+        int u,v,x; cin>>u>>v>>x;
+        edges[i] = {u,v,x};
     }
-    vector<int> dis(n+1, INF);
-    vector<int> par(n+1, -1e7);
-  
-    int fl = 0, st;
-  
-    //BELLMAN FORD : 
-    for(int i=0; i<n; i++){
-        fl = 0;
-        for(auto e : edges){
-            int u = e[0], v = e[1], wt = e[2];
-            if(dis[v] > dis[u] + wt){
-                dis[v] = dis[u] + wt;
+
+    vector<int> dis(n+1,INF), par(n+1,-1);
+
+    for(int i=0;i<n-1;i++){
+        for(auto &e: edges){
+            int u=e[0], v=e[1], w=e[2];
+            if(dis[v] > dis[u] + w){
                 par[v] = u;
-                st = v;
-                fl = 1;
+                dis[v] = dis[u] + w;
             }
         }
     }
+
+    //cycle check : 
+    int fl=0,st=-1;
+    for(auto &e: edges){
+        int u=e[0], v=e[1], w=e[2];
+        if(dis[v] > dis[u] + w){
+            par[v] = u;
+            dis[v] = dis[u] + w;
+            fl=1;
+            st=v;
+        }
+    }
+
     if(!fl){
         cout<<"NO\n"; return;
     }
-  
     cout<<"YES\n";
-  
-    //trace back n-1 times to get the node
-    //which is part of -ve cycle
-    //st now currently maybe a node that's
-    //leading to a exit node i.e. 
-    //one of the neighbour may lead to exit cycle
-  
-    for(int i=1;i<n;i++){
+
+    // For ref : https://cs.stackexchange.com/a/50558/170471
+    //n-1 retraces takes us to the start of this cycle
+    //curr node may be an exit node i.e. connected to non cyclic node
+    for(int i=0;i<n-1;i++){
         st = par[st];
     }
-  
+
     vector<int> path;
     path.pb(st);
-  
+
     int curr = par[st];
     while(curr != st){
         path.pb(curr);
         curr = par[curr];
     }
-  
+
     path.pb(st);
-  
-    reverse(all(path));
-    for(auto e : path) cout<<e<<" ";
+    reverse(all(path)); //directed graph need to maintain order
+    for(auto &e : path) cout<<e<<" ";
 }
 
 int32_t main()
 {
     init();
     int t=1;
-    //cin >> t;
+    // cin >> t;
+    // int i=1;
     while (t--)
     {
+        //cout<<"Case "<<i<<": ";
         solve();
+        //i++;
     }
 }
