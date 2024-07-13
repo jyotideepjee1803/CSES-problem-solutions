@@ -1,17 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
+#define endl '\n'
 #define ff first 
 #define ss second 
-#define all(v) v.begin(),v.end()
-#define revall(v) v.rbegin(), v.rend()
-#define srt(v,l,r) sort(v.begin()+l, v.begin()+r) 
+#define all(u) u.begin(),u.end()
+#define revall(u) u.rbegin(), u.rend()
+#define srt(u,lo,hi) sort(u.begin()+lo, u.begin()+hi) 
 #define pb push_back
 #define vi vector<int>
 #define pii pair<int,int>
-const int mod = 1e9+7;
-const int MAXN = 1e5+2;
-const int INF = 1LL<<62;
+#define piii pair<pii,int>
+const int N = 2e5+10;
+const int mod = 998244353;
+const int MAXN = 3e5+3;
+const int INF = 1e18+7;
 void init()
 {
     ios_base::sync_with_stdio(false);
@@ -23,70 +26,63 @@ void init()
     freopen("outputf.txt", "w", stdout);
 #endif
 }
-//APPROACH : Toposort + Cycle detection using toposort
- 
-int n,m;
-vector<vector<int>> g;
-vector<int> vis;
- 
-void dfs(int u, stack<int> &st){
-    vis[u] = 1;
- 
-    for(auto v : g[u]){
-        if(!vis[v]) dfs(v,st);
-    }
- 
-    st.push(u);
-}
-void solve()
-{
-    cin>>n>>m;
-    g.assign(n+1,{});
-    vis.assign(n+1,0);
- 
-    for(int i=0;i<m;i++){
+
+void solve(){
+    int n,m; cin>>n>>m;
+    vector<vector<int>> g(n+1);
+    vector<int> deg(n+1);
+    for(int i=0;i<m;i++)
+    {
         int u,v; cin>>u>>v;
- 
         g[u].pb(v);
+        deg[v]++;
     }
-    stack<int> st;
+
+    vector<int> vis(n+1);
+    vector<int> order;
+
+    queue<int> q;
     for(int i=1;i<=n;i++){
-        if(!vis[i]){
-            dfs(i,st);
+        if(deg[i] == 0){
+            q.push(i);
         }
     }
- 
-    //check cycle : 
-    map<int,int> occ; vi order;
-    int i = 0;
-    while(!st.empty()){
-        int t = st.top(); st.pop();
-        occ[t] = i;
-        order.pb(t);
-        i++;
-    }
-    
-    for(int i=1; i<=n;i++){
-        for(auto v : g[i]){
-            //child appears earlier
-            if(occ[v] < occ[i]) {
-                cout<<"IMPOSSIBLE\n"; return;
+
+    while(q.size()){
+        auto f = q.front(); q.pop();
+        vis[f]=1;
+        order.pb(f);
+
+        for(auto u : g[f]){
+            if(!vis[u]){
+                deg[u]--;
+                if(deg[u] == 0)
+                    q.push(u);
             }
         }
     }
- 
-    for(auto e : order){
-        cout<<e<<" ";
+
+    if(order.size() != n){
+        cout<<"IMPOSSIBLE\n";
+        return;
     }
+
+    for(int i=0;i<order.size();i++){
+        cout<<order[i]<<" ";
+    }
+    cout<<"\n";
 }
- 
+
 int32_t main()
 {
     init();
     int t=1;
-    //cin >> t;
+    // cin >> t;
+    // int i=1;
     while (t--)
     {
+        //cout<<"Case "<<i<<": ";
         solve();
+        //i++;
     }
 }
